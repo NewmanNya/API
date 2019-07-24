@@ -1,4 +1,6 @@
 import tweepy
+import time
+import os
 
 # For safety, Read key from txt
 def ReadKey():
@@ -18,15 +20,26 @@ def ApiInit():
     return tweepy.API(auth)
 
 # Tweet function
-def Tweet(api, PicAddress, PicName, Content):
+def TweetFunction(api, PicAddress, PicName, Content):
+    filelist = os.listdir(PicAddress)
+    for item in filelist:
+        if(item.startswith(PicName)):
+            PicCmd = PicAddress+ '/' + item
+            break
+    try:
+        api.update_with_media(PicCmd, Content)
+        print("Send "+item)
+    except:
+        print()
 
-
-
-
-    api.update_with_media(r"bg.jpg", "Hello World!\nSend from Pycharm by official APIs\n@Neko__Nya__\no(=•ェ•=)m")
-
+def TweetCmd(num):
+    for i in range(0,num):
+        Content = 'Set Time Test\nTask: '+ str(i)
+        Picname = str(i)
+        Tweet(api, PicAddress="./UPLOAD",PicName= Picname, Content=Content)
+        time.sleep(600)
 
 if __name__ == '__main__':
     api = ApiInit()
-    Tweet(api)
-    pass
+    TweetCmd(5)
+
